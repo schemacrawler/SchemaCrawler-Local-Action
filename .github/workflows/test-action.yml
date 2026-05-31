@@ -1,0 +1,15 @@
+name: Test SchemaCrawler (Local) Action
+
+on:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    name: Test SchemaCrawler (Local) Action
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test SchemaCrawler (Local) Action
+        shell: bash
+        run: |
+          echo "Test SchemaCrawler (Local) Action"

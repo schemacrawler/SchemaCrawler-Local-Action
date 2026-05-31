@@ -1,0 +1,52 @@
+name: 'SchemaCrawler (Local) Action for GitHub Actions'
+author: 'Sualeh Fatehi'
+description: 'Run a SchemaCrawler command in the build pipeline'
+
+branding:
+  icon: database
+  color: white
+
+runs:
+  using: "composite"
+  steps:
+    - id: java-setup
+      name: Set up Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: 21
+
+    - id: sdkman-setup
+      name: Install SDKMAN
+      env:
+        SDKMAN_DIR: ${{ github.workspace }}/.sdkman
+      shell: bash
+      run: |
+        # Install SDKMAN
+        echo "$SDKMAN_DIR"
+        curl -s "https://get.sdkman.io?ci=true" | bash
+        source "$SDKMAN_DIR/bin/sdkman-init.sh"
+        sdk version
+        # Check for current version of SchemaCrawler
+        echo '$ sdk list schemacrawler'
+        sdk list schemacrawler | cat
+
+    - id: sdkman-install
+      name: Install SchemaCrawler with SDKMAN
+      env:
+        SDKMAN_DIR: ${{ github.workspace }}/.sdkman
+      shell: bash
+      run: |
+        # Install SchemaCrawler
+        source "$SDKMAN_DIR/bin/sdkman-init.sh"
+        sdk install schemacrawler
+
+    - id: sdkman-smoke-test
+      name: Smoke test command
+      env:
+        SDKMAN_DIR: ${{ github.workspace }}/.sdkman
+      shell: bash
+      run: |
+        # Check that SchemaCrawler is installed
+        source "$SDKMAN_DIR/bin/sdkman-init.sh"
+        schemacrawler.sh --version
