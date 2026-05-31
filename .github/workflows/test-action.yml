@@ -9,29 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - id: sdkman-smoke-test
-      name: Smoke test command
+    - id: install-schemacrawler
+      name: Install SchemaCrawler on the GitHub Actions runner
       uses: schemacrawler/SchemaCrawler-Local-Action@v17.11.2
-      env:
-        SDKMAN_DIR: ${{ github.workspace }}/.sdkman
-      shell: bash
-      run: |
-        # Check that SchemaCrawler is installed
-        source "$SDKMAN_DIR/bin/sdkman-init.sh"
-        schemacrawler.sh --version
 
-    - id: sdkman-smoke-test
-      name: Smoke test command
-      uses: schemacrawler/SchemaCrawler-Local-Action@v17.11.2
+    - id: schemacrawler-test
+      name: Create SchemaCrawler report
       env:
         SDKMAN_DIR: ${{ github.workspace }}/.sdkman
       shell: bash
       run: |
-        # Run SchemaCrawler
+        # Run SchemaCrawler against a test database
         source "$SDKMAN_DIR/bin/sdkman-init.sh"
         schemacrawler.sh \
             --server=sqlite \
-            --database=schemacrawler.sqlite \
+            --database=$SDKMAN_DIR/candidates/schemacrawler/17.11.2/sc.db \
             --info-level=standard \
             --command script \
             --tables "Authors|Books|BookAuthors" \
@@ -39,4 +31,10 @@ jobs:
             --script mermaid.py \
             --output-file mermaid-er.mmd \
             --log-level CONFIG
+
+    - id: check-report
+      name: Check SchemaCrawler report
+      shell: bash
+      run: |
+        # Check report
         cat mermaid-er.mmd
