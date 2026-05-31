@@ -13,7 +13,7 @@ jobs:
       name: Install SchemaCrawler on the GitHub Actions runner
       uses: schemacrawler/SchemaCrawler-Local-Action@v17.11.2
 
-    - id: schemacrawler-test
+    - id: schemacrawler-report
       name: Create SchemaCrawler report
       env:
         SDKMAN_DIR: ${{ github.workspace }}/.sdkman
@@ -33,8 +33,11 @@ jobs:
             --log-level CONFIG
 
     - id: check-report
-      name: Check SchemaCrawler report
-      shell: bash
+      name: Wrap Mermaid diagram in Markdown and display
       run: |
-        # Check report
-        cat mermaid-er.mmd
+        # Create enclosing Markdown file with Mermaid code block
+        echo '```mermaid' > mermaid-diagram.md
+        cat mermaid-er.mmd >> mermaid-diagram.md
+        echo '```' >> mermaid-diagram.md
+        # Display the wrapped content in workflow output
+        cat mermaid-diagram.md >> $GITHUB_STEP_SUMMARY
