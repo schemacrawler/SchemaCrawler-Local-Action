@@ -11,7 +11,7 @@ jobs:
     steps:
     - id: install-schemacrawler
       name: Install SchemaCrawler on the GitHub Actions runner
-      uses: schemacrawler/SchemaCrawler-Local-Action@v17.11.2
+      uses: schemacrawler/SchemaCrawler-Local-Action@v17.11.3
 
     - id: schemacrawler-report
       name: Create SchemaCrawler report
@@ -23,7 +23,7 @@ jobs:
         source "$SDKMAN_DIR/bin/sdkman-init.sh"
         schemacrawler.sh \
             --server=sqlite \
-            --database=$SDKMAN_DIR/candidates/schemacrawler/17.11.2/sc.db \
+            --database=$SDKMAN_DIR/candidates/schemacrawler/17.11.3/sc.db \
             --info-level=standard \
             --command script \
             --tables "Authors|Books|BookAuthors" \
@@ -32,8 +32,8 @@ jobs:
             --output-file mermaid-er.mmd \
             --log-level CONFIG
 
-    - id: check-report
-      name: Wrap Mermaid diagram in Markdown and display
+    - id: display-report
+      name: Wrap Mermaid diagram in Markdown and display as job output
       run: |
         # Create enclosing Markdown file with Mermaid code block
         echo '```mermaid' > mermaid-diagram.md
