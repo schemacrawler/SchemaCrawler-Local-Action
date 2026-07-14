@@ -11,7 +11,7 @@ jobs:
     steps:
     - id: install-schemacrawler
       name: Install SchemaCrawler on the GitHub Actions runner
-      uses: schemacrawler/SchemaCrawler-Local-Action@v17.11.4
+      uses: schemacrawler/SchemaCrawler-Local-Action@v17.12.1
 
     - id: schemacrawler-report
       name: Create SchemaCrawler report
@@ -23,7 +23,7 @@ jobs:
         source "$SDKMAN_DIR/bin/sdkman-init.sh"
         schemacrawler.sh \
             --server=sqlite \
-            --database=$SDKMAN_DIR/candidates/schemacrawler/17.11.4/sc.db \
+            --database=$SDKMAN_DIR/candidates/schemacrawler/17.12.1/sc.db \
             --info-level=standard \
             --command script \
             --tables "Authors|Books|BookAuthors" \
